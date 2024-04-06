@@ -4,9 +4,17 @@ type UserInfo struct {
 	ID            int32  `json:"user_id"`
 	Name          string `json:"user_name"`
 	Email         string `json:"user_email"`
-	PhoneNumber   int32  `json:"user_phoneNumber"`
-	PanCardNumber int32  `json:"user_panCardNumber"`
+	PhoneNumber   string `json:"user_phoneNumber"` // Changed type to string
+	PanCardNumber string `json:"user_panCardNumber"`
 	Password      string `json:"user_password"`
+}
+
+type DatabaseConfig struct {
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Name     string `yaml:"name"`
 }
 
 /*

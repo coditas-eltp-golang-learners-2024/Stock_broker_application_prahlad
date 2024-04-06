@@ -2,6 +2,9 @@
 database:
   host: localhost
   port: 3306
-  username: root
+  Username: root
   password: Root@123
   name: stockBrokerDB
+
+
+#We create this yml file for devops team so that they understand yml file better.

@@ -2,29 +2,36 @@ package utils
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var Client *sql.DB
+var Db *sql.DB
 
-func NewConnection() error {
+func CreateConnection() {
 
-	// Open up our database connection.
-	// I've set up a database on my local machine using Docker.
+	// Load configuration values from the YAML file
+	cfg := LoadConfig("resources/application.yml")
 
-	db, err := sql.Open("mysql", "root:Root@123@tcp(localhost:3306)/hospital")
-
-	// if there is an error opening the connection, handle it
+	// Opening a connection from Go application to the Database
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+		cfg.Database.Username, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port, cfg.Database.Name))
 	if err != nil {
-		// panic(err.Error())
-		return err
-	}
-	err = db.Ping()
-	if err != nil {
-		return err
+		log.Println("Error in opening the sql connection")
+		panic(err.Error())
 	}
 
-	Client = db
-	return nil
+	Db = db
+
+	//defer Db.Close()
+	//Verifying the Connection
+	error1 := Db.Ping()
+	if error1 != nil {
+		fmt.Println("There is some error in verifying the connection with the database")
+		return // Exit function if there's an error
+	}
+
+	fmt.Println("Successfully created a connection!")
 }
