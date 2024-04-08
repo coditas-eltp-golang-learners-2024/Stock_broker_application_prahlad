@@ -1,13 +1,11 @@
 package service
 
 import (
-	"database/sql"
-	"log"
 	"reflect"
 	"regexp"
 
 	"Stock_broker_application/src/app/authentication/models"
-	"Stock_broker_application/src/app/authentication/utils"
+	"Stock_broker_application/src/app/authentication/repo"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -18,30 +16,24 @@ var (
 	alphanumericRegex = regexp.MustCompile("^[a-zA-Z0-9]+$")
 )
 
+// UserService handles user-related business logic.
+type UserService struct {
+}
+
+// NewUserService creates a new instance of UserService.
+func NewUserService() *UserService {
+	return &UserService{}
+}
+
 /*They implement the actual business rules, perform data manipulation,
 interact with databases or external services, etc.
  It abstracts away the details of data access, validation, and other low-level concerns.
 */
 
 // Step 2: Check if the provided email already exists in the map
-func CheckIfUserExistsByEmail(email string) (bool, error) {
-	// Prepare SQL query to check if the email exists
-	query := "SELECT COUNT(*) FROM userSignUpCredentials WHERE email = ?"
-
-	// Execute the query
-	var count int
-	err := utils.Db.QueryRow(query, email).Scan(&count)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			// No user with this email exists
-			return false, nil
-		}
-		log.Printf("Error checking user existence: %v", err)
-		return false, err
-	}
-
-	// If count > 0, user with this email exists
-	return count > 0, nil
+func (s *UserService) CheckUserExistenceByEmail(email string) (bool, error) {
+	// Call the data access layer (repository) function to check user existence
+	return repo.CheckIfUserExistsByEmail(email)
 }
 
 // ValidateStringType checks if the input parameter is of type string
@@ -100,25 +92,8 @@ func ValidatePassword(password string) bool {
 }
 
 // InsertUserInfo inserts user information into the database
-func InsertUserInfo(userInfo models.UserInfo) error {
-	// Prepare SQL query for insertion
-	query := `
-		INSERT INTO userSignUpCredentials ( id, name, email, phoneNumber, panCardNumber, password)
-		VALUES (?,?, ?, ?, ?, ?)
-	`
-
-	// Execute SQL query with prepared statement
-	result, err := utils.Db.Exec(query, userInfo.ID, userInfo.Name, userInfo.Email, userInfo.PhoneNumber, userInfo.PanCardNumber, userInfo.Password)
-	if err != nil {
-		log.Printf("Error inserting user data into the database: %v", err)
-		return err
-	}
-
-	rowsAffected, _ := result.RowsAffected()
-	if rowsAffected == 0 {
-		log.Println("No rows affected during user data insertion")
-		return sql.ErrNoRows
-	}
-
-	return nil
+// InsertUser inserts user information into the database.
+func (s *UserService) InsertUser(userInfo models.UserInfo) error {
+	// Call the data access layer (repository) function to insert user information
+	return repo.InsertUserInfo(userInfo)
 }

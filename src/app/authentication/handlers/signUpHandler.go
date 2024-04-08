@@ -1,97 +1,101 @@
+// handlers/post_users_data.go
+
 package handlers
 
-/*deal with HTTP request handling and response generation. They are responsible for processing incoming
-requests, extracting necessary data, invoking appropriate services or business logic, and returning
- the response to the client.
-
-*/
 import (
+	"log"
+	"net/http"
+
 	"Stock_broker_application/src/app/authentication/constants"
 	"Stock_broker_application/src/app/authentication/models"
 	"Stock_broker_application/src/app/authentication/service"
-	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func PostUsersData(c *gin.Context) {
-	// Step 1: Binding the JSON format users request to readable format
-	if err := c.ShouldBindJSON(&constants.UserInstance); err != nil {
+	var users []models.UserInfo
+
+	// Step 1: Binding the JSON format users request to a readable format
+	if err := c.ShouldBindJSON(&users); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	log.Println("Binding the data completed")
+	log.Printf("Binding of data completed. Number of users: %d", len(users))
 
-	//Step 2: Check if the users data already exist in the database
-	exists, err := service.CheckIfUserExistsByEmail(constants.UserInstance.Email)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error checking user existence"})
-		return
+	// Create channels for communication and synchronization
+	errorChan := make(chan error, len(users))
+	doneChan := make(chan struct{})
+
+	// Process each user signup concurrently using goroutines
+	for _, user := range users {
+		go func(u models.UserInfo) {
+			defer func() {
+				if r := recover(); r != nil {
+					errorChan <- constants.ErrInternalError
+				}
+			}()
+
+			// Step 2: Validate and process each user signup
+			err := processUserSignup(u)
+			if err != nil {
+				errorChan <- err
+			}
+		}(user)
 	}
 
-	if exists {
-		c.JSON(http.StatusConflict, gin.H{"error": "User with this email already exists"})
-		return
+	// Use a goroutine to wait for all user signups to complete
+	go func() {
+		for range users {
+			select {
+			case err := <-errorChan:
+				if err != nil {
+					doneChan <- struct{}{} // Signal completion with error
+					return
+				}
+			}
+		}
+		doneChan <- struct{}{} // Signal successful completion
+	}()
+
+	// Wait for all user signups to complete or encounter an error
+	select {
+	case <-doneChan:
+		c.JSON(http.StatusOK, gin.H{"message": "All user information inserted successfully"})
+		log.Println("All user information inserted successfully")
+	case <-c.Request.Context().Done():
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Request cancelled or timed out"})
+		log.Println("Request cancelled or timed out")
 	}
 
-	log.Println("New user verfied!")
+	// Close channels to prevent goroutine leaks
+	close(errorChan)
+	close(doneChan)
+}
 
-	// Step 3: Validating name
-	if !service.ValidateStringType(constants.UserInstance.Name) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid name format, must be a string"})
-		return
+func processUserSignup(user models.UserInfo) error {
+	// Step 3: Validate user data
+	if !service.ValidateStringType(user.Name) {
+		return constants.ErrInvalidNameFormat
 	}
-	log.Println("Name validation successful!")
-
-	// Step 4: Validate the email format
-	if !service.ValidateEmail(constants.UserInstance.Email) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email format"})
-		return
+	if !service.ValidateEmail(user.Email) {
+		return constants.ErrInvalidEmailFormat
 	}
-	log.Println("Email validation successful!")
-
-	// Step 5: Validate the phone number length
-	if !service.ValidatePANCard(constants.UserInstance.PanCardNumber) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid PAN card format or length (must be 10 alphanumeric characters)"})
-		return
+	if !service.ValidatePhoneNumber(user.PhoneNumber) {
+		return constants.ErrInvalidPhoneNumber
 	}
-	log.Println("Phone Number validation successful!")
-
-	// Step 6: Validate PAN card format
-	if !service.ValidatePANCard(constants.UserInstance.PanCardNumber) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid PAN card format or length (must be 10 alphanumeric characters)"})
-		return
+	if !service.ValidatePANCard(user.PanCardNumber) {
+		return constants.ErrInvalidPANCardFormat
 	}
-	log.Println("PAN card number validation successful!")
-
-	// Step 7: Validate password format and length
-	if !service.ValidatePassword(constants.UserInstance.Password) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Password must be at least 10 characters long and alphanumeric"})
-		return
-	}
-	log.Println("Password validation successful!")
-
-	// All validations passed, proceed to insert data into the database
-	userInfo := models.UserInfo{
-		ID:            constants.UserInstance.ID,
-		Name:          constants.UserInstance.Name,
-		Email:         constants.UserInstance.Email,
-		PhoneNumber:   constants.UserInstance.PhoneNumber,
-		PanCardNumber: constants.UserInstance.PanCardNumber,
-		Password:      constants.UserInstance.Password,
+	if !service.ValidatePassword(user.Password) {
+		return constants.ErrInvalidPasswordFormat
 	}
 
-	// Insert data into the database
-	err = service.InsertUserInfo(userInfo)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error inserting user data into the database"})
-		return
+	// Step 4: Insert user information into the database
+	userService := service.NewUserService()
+	if err := userService.InsertUser(user); err != nil {
+		return constants.ErrInsertUserInformation
 	}
 
-	log.Println("User data inserted successfully!")
-
-	// Respond with success message
-	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully!"})
-
+	return nil
 }
