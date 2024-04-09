@@ -1,6 +1,7 @@
-package utils
+package db
 
 import (
+	"Stock_broker_application/src/app/authentication/utils"
 	"database/sql"
 	"fmt"
 	"log"
@@ -13,7 +14,7 @@ var Db *sql.DB
 func CreateConnection() {
 
 	// Load configuration values from the YAML file
-	cfg := LoadConfig("resources/application.yml")
+	cfg := utils.LoadConfig("resources/application.yml")
 
 	// Opening a connection from Go application to the Database
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",

@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/spf13/viper"
-	//"Stock_broker_application/src/app/authentication/models"
 )
 
 //From here we will create the mapping of the yml file which is readable to go lang

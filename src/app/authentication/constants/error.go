@@ -14,4 +14,5 @@ var (
 	ErrNoRowsAffected        = errors.New("no rows affected during user data insertion")
 	ErrUserAlreadyExists     = errors.New("user with this email already exists")
 	ErrInternalError         = errors.New("internal server error")
+	ErrStartingServer        = errors.New("failed to start server")
 )
