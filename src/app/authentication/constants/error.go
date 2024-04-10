@@ -15,4 +15,6 @@ var (
 	ErrUserAlreadyExists     = errors.New("user with this email already exists")
 	ErrInternalError         = errors.New("internal server error")
 	ErrStartingServer        = errors.New("failed to start server")
+	ErrInVerification        = errors.New("Invalid credentials, please try again")
+	ErrInBindingData         = errors.New("Failed to bind data")
 )

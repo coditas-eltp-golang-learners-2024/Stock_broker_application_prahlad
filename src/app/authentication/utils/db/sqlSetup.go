@@ -1,15 +1,18 @@
 package db
 
 import (
+	//	"Stock_broker_application/src/app/authentication/utils"
 	"Stock_broker_application/src/app/authentication/utils"
 	"database/sql"
 	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 var Db *sql.DB
+var GormDb *gorm.DB
 
 func CreateConnection() {
 

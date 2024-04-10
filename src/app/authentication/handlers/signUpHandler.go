@@ -23,7 +23,7 @@ func PostUsersData(c *gin.Context) {
 	userRepository := repo.NewUserRepository()
 
 	// Create a new UserService instance with UserRepository injected
-	userService := service.NewUserService(*userRepository)
+	userService := service.NewUserService(userRepository)
 
 	// Call the SignUp method to handle user signup
 	if err := userService.SignUp(&user); err != nil {

@@ -16,8 +16,8 @@ type userService struct {
 }
 
 // NewUserService creates a new instance of UserService.
-func NewUserService(userRepository repo.UserRepository) UserService {
-	return &userService{userRepository}
+func NewUserService(UserRepository *repo.UserRepository) *userService {
+	return &userService{userRepository: *UserRepository}
 }
 
 // SignUp handles the user signup process.
@@ -46,7 +46,6 @@ func (s *userService) SignUp(user *models.UserInfo) error {
 
 // SignUpValidations performs all the necessary validations for user signup.
 func SignUpValidations(user *models.UserInfo) error {
-	// Your validation logic here
-	// Example: validate name, email, phone number, etc.
+
 	return nil
 }
