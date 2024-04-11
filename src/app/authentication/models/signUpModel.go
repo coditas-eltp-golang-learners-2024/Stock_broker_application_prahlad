@@ -1,12 +1,11 @@
 package models
 
 type UserInfo struct {
-	ID            int32  `json:"user_id"`
-	Name          string `json:"user_name"`
-	Email         string `json:"user_email"`
-	PhoneNumber   string `json:"user_phoneNumber"` // Changed type to string
-	PanCardNumber string `json:"user_panCardNumber"`
-	Password      string `json:"user_password"`
+	Name          string `json:"userName" validate:"required,alpha"`
+	Email         string `json:"userEmail" validate:"required,email"`
+	PhoneNumber   uint   `json:"userPhoneNumber" validate:"required,gte=0000000000,lte=9999999999"`
+	PanCardNumber string `json:"userPanCardNumber" validate:"required,alphanum,len=10"`
+	Password      string `json:"userPassword" validate:"required,alphanum,min=8"`
 }
 
 type DatabaseConfig struct {

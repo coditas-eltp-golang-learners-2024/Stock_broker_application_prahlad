@@ -4,6 +4,7 @@ import (
 	"Stock_broker_application/src/app/authentication/constants"
 	"Stock_broker_application/src/app/authentication/models"
 	"Stock_broker_application/src/app/authentication/repo"
+	"Stock_broker_application/src/app/authentication/utils"
 )
 
 // UserService defines the interface for user-related operations.
@@ -23,12 +24,12 @@ func NewUserService(UserRepository *repo.UserRepository) *userService {
 // SignUp handles the user signup process.
 func (s *userService) SignUp(user *models.UserInfo) error {
 	// Perform custom validations
-	if err := SignUpValidations(user); err != nil {
+	if err := utils.SignUpValidations(user); err != nil {
 		return err
 	}
 
 	// Check if user already exists
-	exists, err := repo.CheckUserExistenceByEmail(user.Email)
+	exists, err := s.userRepository.CheckIfUserExistsByEmail(user.Email)
 	if err != nil {
 		return constants.ErrUserExistenceFailed
 	}
@@ -37,7 +38,7 @@ func (s *userService) SignUp(user *models.UserInfo) error {
 	}
 
 	// Insert user information into the database
-	if err := s.userRepository.InsertUserInfo(*user); err != nil {
+	if err := s.userRepository.InsertUserInfo(user); err != nil {
 		return constants.ErrInsertUserInformation
 	}
 

@@ -28,6 +28,7 @@ func PostUsersData(c *gin.Context) {
 	// Call the SignUp method to handle user signup
 	if err := userService.SignUp(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
 		return
 	}
 

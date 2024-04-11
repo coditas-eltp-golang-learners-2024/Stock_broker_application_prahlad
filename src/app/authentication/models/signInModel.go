@@ -1,6 +1,6 @@
 package models
 
 type SignInCredentials struct {
-	UserName string `json:"name" validate:"required"`
-	Password string `json:"password" validate:"required"`
+	Name     string `json:"userName" validate:"required,alpha"`
+	Password string `json:"userPassword" validate:"required,alphanum,min=8"`
 }
