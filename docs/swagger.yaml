@@ -1,25 +1,27 @@
 basePath: /
 definitions:
-  handlers.ErrorResponse:
+  models.ErrorResponse:
     properties:
       error:
-        type: string
-    type: object
-  handlers.SuccessResponse:
-    properties:
-      message:
         type: string
     type: object
   models.SignInCredentials:
     properties:
       userName:
+        example: Username
         type: string
       userPassword:
+        example: userPassword
         minLength: 8
         type: string
     required:
     - userName
     - userPassword
+    type: object
+  models.SuccessResponse:
+    properties:
+      message:
+        type: string
     type: object
   models.UserInfo:
     properties:
@@ -48,9 +50,7 @@ definitions:
     type: object
   service.SignInRepository:
     type: object
-  service.UserRepository:
-    type: object
-host: localhost:8080
+host: localhost:8081
 info:
   contact: {}
   description: This is a Stock Broker Application API
@@ -99,58 +99,10 @@ paths:
         "200":
           description: User information inserted successfully
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/models.SuccessResponse'
         "400":
           description: Error message
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/models.ErrorResponse'
       summary: Create a new user
-  /signup/new:
-    post:
-      consumes:
-      - application/json
-      description: Creates a new instance of UserService with the provided UserRepository.
-      parameters:
-      - description: Pointer to repo.UserRepository
-        in: body
-        name: UserRepository
-        required: true
-        schema:
-          $ref: '#/definitions/service.UserRepository'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Instance of UserService created successfully
-          schema:
-            type: string
-      summary: Create a new instance of UserService.
-  /verify:
-    post:
-      consumes:
-      - application/json
-      description: Verifies user's sign-in credentials.
-      parameters:
-      - description: Username
-        in: path
-        name: username
-        required: true
-        type: string
-      - description: Password
-        in: path
-        name: password
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: "true"
-          schema:
-            type: string
-        "400":
-          description: "false"
-          schema:
-            type: string
-      summary: Verify user sign-in credentials
 swagger: "2.0"

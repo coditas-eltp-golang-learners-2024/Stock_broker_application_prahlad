@@ -20,27 +20,13 @@ import (
 func SetUpRouter() *gin.Engine {
 	router := gin.Default()
 
-	// Define route for handling POST requests to create new users
-	// @Summary Create a new user
-	// @Description Handles HTTP POST request to create new users
-	// @Accept json
-	// @Produce json
-	// @Router /users [post]
-	router.POST(constants.CreateUserRoute, handlers.PostUsersData)
-
-	// Create SignInRepository instance with database connection
 	signInRepo := repo.NewSignInRepository()
-
-	// Create SignInService instance with SignInRepository dependency injected
 	signInService := service.NewSignInService(signInRepo)
 
-	// Define route for handling POST requests to sign in users
-	// @Summary User sign-in
-	// @Description Handles user sign-in endpoint
-	// @Accept json
-	// @Produce json
-	// @Param credentials body models.SignInCredentials true "User credentials for sign-in"
-	// @Router /signin [post]
+	userRepository := repo.NewUserRepository()
+	userService := service.NewUserService(userRepository)
+
+	router.POST(constants.CreateUserRoute, handlers.PostUsersData(userService))
 	router.POST(constants.SignInRoute, handlers.SignInHandler(signInService))
 
 	// Adding Swagger documentation route

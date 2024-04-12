@@ -28,16 +28,6 @@ func NewSignInService(signInRepo SignInRepository) *SignInService {
 	return &SignInService{signInRepo: signInRepo}
 }
 
-// VerifySignInCredentials verifies user's sign-in credentials.
-// @Summary Verify user sign-in credentials
-// @Description Verifies user's sign-in credentials.
-// @Accept json
-// @Produce json
-// @Param username path string true "Username"
-// @Param password path string true "Password"
-// @Success 200 {string} string "true"
-// @Failure 400 {string} string "false"
-// @Router /verify [post]
 func (s *SignInService) VerifySignInCredentials(username, password string) bool {
 	return s.signInRepo.VerifySignInCredentials(username, password)
 }

@@ -77,86 +77,13 @@ const docTemplate = `{
                     "200": {
                         "description": "User information inserted successfully",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/models.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Error message",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/signup/new": {
-            "post": {
-                "description": "Creates a new instance of UserService with the provided UserRepository.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create a new instance of UserService.",
-                "parameters": [
-                    {
-                        "description": "Pointer to repo.UserRepository",
-                        "name": "UserRepository",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/service.UserRepository"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Instance of UserService created successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/verify": {
-            "post": {
-                "description": "Verifies user's sign-in credentials.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Verify user sign-in credentials",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Username",
-                        "name": "username",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Password",
-                        "name": "password",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "true",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "false",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.ErrorResponse"
                         }
                     }
                 }
@@ -164,18 +91,10 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handlers.ErrorResponse": {
+        "models.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
-                    "type": "string"
-                }
-            }
-        },
-        "handlers.SuccessResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
                     "type": "string"
                 }
             }
@@ -188,11 +107,21 @@ const docTemplate = `{
             ],
             "properties": {
                 "userName": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Username"
                 },
                 "userPassword": {
                     "type": "string",
-                    "minLength": 8
+                    "minLength": 8,
+                    "example": "userPassword"
+                }
+            }
+        },
+        "models.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },
@@ -231,9 +160,6 @@ const docTemplate = `{
         },
         "service.SignInRepository": {
             "type": "object"
-        },
-        "service.UserRepository": {
-            "type": "object"
         }
     }
 }`
@@ -241,7 +167,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "localhost:8081",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Stock Broker Application",

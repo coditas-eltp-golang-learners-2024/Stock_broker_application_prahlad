@@ -11,7 +11,7 @@ import (
 //@title Stock Broker Application
 //@version 1.0
 //@description This is a Stock Broker Application API
-//@host localhost:8080
+//@host localhost:8081
 //@BasePath /
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 	r := router.SetUpRouter()
 
 	// Start the HTTP server
-	serverErr := r.Run(":8080")
+	serverErr := r.Run(":8081")
 	if serverErr != nil {
 		log.Fatalf("Failed to start server: %v", constants.ErrStartingServer)
 	}

@@ -13,12 +13,3 @@ type UserInfo struct {
 func (UserInfo) TableName() string {
 	return "userSignUpCredentials" // Specify the desired table name here
 }
-
-// DatabaseConfig represents the configuration values for database connection.
-type DatabaseConfig struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	Username string `yamls:"username"`
-	Password string `yaml:"password"`
-	Name     string `yaml:"name"`
-}
