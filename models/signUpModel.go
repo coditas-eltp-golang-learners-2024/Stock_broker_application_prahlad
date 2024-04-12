@@ -2,11 +2,11 @@ package models
 
 // UserInfo represents the structure of user information.
 type UserInfo struct {
-	Name          string `json:"userName" validate:"required,alpha"`
-	Email         string `json:"userEmail" validate:"required,email"`
-	PhoneNumber   string `json:"userPhoneNumber" validate:"required,gte=0000000000,lte=9999999999"`
-	PanCardNumber string `json:"userPanCardNumber" validate:"required,alphanum,len=10"`
-	Password      string `json:"userPassword" validate:"required,alphanum,min=8"`
+	Name          string `json:"userName" validate:"required,alpha" example:"TestUser"`
+	Email         string `json:"userEmail" validate:"required,email" example:"testUser@gmail.com"`
+	PhoneNumber   string `json:"userPhoneNumber" validate:"required,len=10" example:"7878543610"`
+	PanCardNumber string `json:"userPanCardNumber" validate:"required,alphanum,len=10" example:"abgjhi6789"`
+	Password      string `json:"userPassword" validate:"required,alphanum,min=8" example:"sample11110"`
 }
 
 // TableName sets the table name for UserInfo explicitly.
@@ -18,7 +18,7 @@ func (UserInfo) TableName() string {
 type DatabaseConfig struct {
 	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
-	Username string `yaml:"username"`
+	Username string `yamls:"username"`
 	Password string `yaml:"password"`
 	Name     string `yaml:"name"`
 }

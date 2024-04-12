@@ -24,17 +24,20 @@ definitions:
   models.UserInfo:
     properties:
       userEmail:
+        example: testUser@gmail.com
         type: string
       userName:
+        example: TestUser
         type: string
       userPanCardNumber:
+        example: abgjhi6789
         type: string
       userPassword:
+        example: sample11110
         minLength: 8
         type: string
       userPhoneNumber:
-        maxLength: 9999999999
-        minLength: 0
+        example: "7878543610"
         type: string
     required:
     - userEmail

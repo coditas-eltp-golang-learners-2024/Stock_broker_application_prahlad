@@ -4,6 +4,9 @@ import "errors"
 
 // Custom error types used throughout the application
 var (
+	// ErrInSignUp indicates a failure in signing up.
+	ErrInSignUp = errors.New("failed to sign up")
+
 	// ErrUserExistenceFailed indicates a failure in checking user existence.
 	ErrUserExistenceFailed = errors.New("failed to check user existence")
 
@@ -42,7 +45,4 @@ var (
 
 	// ErrInBindingData indicates a failure to bind data.
 	ErrInBindingData = errors.New("failed to bind data")
-
-	// ErrInSignUp indicates a failure in signing up.
-	ErrInSignUp = errors.New("Failed to sign up")
 )
