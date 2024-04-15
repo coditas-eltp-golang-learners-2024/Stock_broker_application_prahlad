@@ -30,6 +30,12 @@ func main() {
 		}
 	}()
 
+	// SetUpRouter sets up the Gin router with API endpoints and Swagger documentation.
+	// @title Stock Broker Application
+	// @version 1.0
+	// @description This is a Stock Broker Application API
+	// @host localhost:8080
+	// @BasePath /
 	// Setting up the router
 	r := router.SetUpRouter()
 
