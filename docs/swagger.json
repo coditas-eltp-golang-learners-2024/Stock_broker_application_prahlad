@@ -1,0 +1,159 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a Stock Broker Application API",
+        "title": "Stock Broker Application",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/signin": {
+            "post": {
+                "description": "Performs validations on user sign-in credentials and verifies them.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Perform sign-in validations",
+                "parameters": [
+                    {
+                        "description": "User sign-in credentials",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SignInCredentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully signed in",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to sign in",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "post": {
+                "description": "Handles HTTP POST request to create new users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new user",
+                "parameters": [
+                    {
+                        "description": "User information in JSON format",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User information inserted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/models.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Error message",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SignInCredentials": {
+            "type": "object",
+            "required": [
+                "userName",
+                "userPassword"
+            ],
+            "properties": {
+                "userName": {
+                    "type": "string",
+                    "example": "Username"
+                },
+                "userPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "userPassword"
+                }
+            }
+        },
+        "models.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserInfo": {
+            "type": "object",
+            "required": [
+                "userEmail",
+                "userName",
+                "userPanCardNumber",
+                "userPassword",
+                "userPhoneNumber"
+            ],
+            "properties": {
+                "userEmail": {
+                    "type": "string",
+                    "example": "testUser@gmail.com"
+                },
+                "userName": {
+                    "type": "string",
+                    "example": "TestUser"
+                },
+                "userPanCardNumber": {
+                    "type": "string",
+                    "example": "abgjhi6789"
+                },
+                "userPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "sample11110"
+                },
+                "userPhoneNumber": {
+                    "type": "string",
+                    "example": "7878543610"
+                }
+            }
+        },
+        "service.SignInRepository": {
+            "type": "object"
+        }
+    }
+}

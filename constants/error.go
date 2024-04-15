@@ -2,8 +2,9 @@ package constants
 
 import "errors"
 
-// Custom error types
+// Custom error types used throughout the application
 var (
+	ErrInSignUp              = errors.New("failed to sign up")
 	ErrUserExistenceFailed   = errors.New("failed to check user existence")
 	ErrInvalidNameFormat     = errors.New("invalid name format, must be a string")
 	ErrInvalidEmailFormat    = errors.New("invalid email format")
@@ -15,4 +16,6 @@ var (
 	ErrUserAlreadyExists     = errors.New("user with this email already exists")
 	ErrInternalError         = errors.New("internal server error")
 	ErrStartingServer        = errors.New("failed to start server")
+	ErrInVerification        = errors.New("invalid credentials, please try again")
+	ErrInBindingData         = errors.New("failed to bind data")
 )
