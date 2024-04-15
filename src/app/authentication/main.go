@@ -2,23 +2,47 @@ package main
 
 import (
 	"Stock_broker_application/src/app/authentication/constants"
+	_ "Stock_broker_application/src/app/authentication/docs"
 	"Stock_broker_application/src/app/authentication/router"
-	utils "Stock_broker_application/src/app/authentication/utils/db"
+	"Stock_broker_application/src/app/authentication/utils/db"
 	"log"
 )
 
+//@title Stock Broker Application
+//@version 1.0
+//@description This is a Stock Broker Application API
+//@host localhost:8081
+//@BasePath /
+
 func main() {
 
-	utils.CreateConnection()
-	defer utils.Db.Close() //Closing the database connection after main function is executed
+	// Create a database connection
+	db.CreateConnection()
 
-	// Setting up router
+	// Defer closing the database connection when the function exits
+	defer func() {
+		sqlDB, err := db.GormDb.DB()
+		if err != nil {
+			panic("Failed to get underlying DB connection")
+		}
+		if err := sqlDB.Close(); err != nil {
+			panic("Failed to close database connection")
+		}
+	}()
+
+	// SetUpRouter sets up the Gin router with API endpoints and Swagger documentation.
+	// @title Stock Broker Application
+	// @version 1.0
+	// @description This is a Stock Broker Application API
+	// @host localhost:8080
+	// @BasePath /
+	// Setting up the router
 	r := router.SetUpRouter()
 
 	// Start the HTTP server
-	err := r.Run(":8081")
-	if err != nil {
-		log.Fatalf("Found Error: %v", constants.ErrStartingServer)
+	serverErr := r.Run(":8081")
+	if serverErr != nil {
+		log.Fatalf("Failed to start server: %v", constants.ErrStartingServer)
 	}
 
 }
