@@ -12,17 +12,19 @@ type UserService interface {
 	SignUp(user *models.UserInfo) error
 }
 
-type userService struct {
+type UserServiceStruct struct {
 	userRepository repo.UserRepository
 }
 
 // NewUserService creates a new instance of UserService.
-func NewUserService(UserRepository *repo.UserRepository) *userService {
-	return &userService{userRepository: *UserRepository}
+func NewUserService(UserRepository repo.UserRepository) *UserServiceStruct {
+	return &UserServiceStruct{userRepository: UserRepository}
 }
 
 // SignUp handles the user signup process.
-func (s *userService) SignUp(user *models.UserInfo) error {
+// @param user body models.UserInfo true "User information"
+// @return error
+func (s *UserServiceStruct) SignUp(user *models.UserInfo) error {
 	// Perform custom validations
 	if err := utils.SignUpValidations(user); err != nil {
 		return err
@@ -46,7 +48,9 @@ func (s *userService) SignUp(user *models.UserInfo) error {
 }
 
 // SignUpValidations performs all the necessary validations for user signup.
+// @param user body models.UserInfo true "User information"
+// @return error
 func SignUpValidations(user *models.UserInfo) error {
-
+	// Implement custom validations here if needed
 	return nil
 }

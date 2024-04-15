@@ -1,7 +1,7 @@
 package constants
 
+// User related routes
 const (
-	// User related routes
-	CreateUserRoute = "/users"
+	CreateUserRoute = "/signup"
 	SignInRoute     = "/signin"
 )

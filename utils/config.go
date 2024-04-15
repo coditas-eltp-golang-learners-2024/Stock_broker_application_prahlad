@@ -7,16 +7,18 @@ import (
 	"github.com/spf13/viper"
 )
 
-//From here we will create the mapping of the yml file which is readable to go lang
-
 // Config struct to hold the configuration values
 type Config struct {
 	Database models.DatabaseConfig
 }
 
-// LoadConfig loads configuration values from the provided YAML file
+// LoadConfig loads configuration values from the provided YAML file using Viper.
+// It reads the YAML file specified by 'filePath', unmarshals it into a Config struct,
+// and returns the Config struct containing the loaded configuration values.
+// @param filePath path string true "Path to the YAML configuration file"
+// @return Config
 func LoadConfig(filePath string) Config {
-	// Set the path to the config file: BAsically telling viper where to read data from.
+	// Set the path to the config file
 	viper.SetConfigFile(filePath)
 
 	// Read in the config file

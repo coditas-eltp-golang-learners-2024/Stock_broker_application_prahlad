@@ -1,0 +1,108 @@
+basePath: /
+definitions:
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.SignInCredentials:
+    properties:
+      userName:
+        example: Username
+        type: string
+      userPassword:
+        example: userPassword
+        minLength: 8
+        type: string
+    required:
+    - userName
+    - userPassword
+    type: object
+  models.SuccessResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.UserInfo:
+    properties:
+      userEmail:
+        example: testUser@gmail.com
+        type: string
+      userName:
+        example: TestUser
+        type: string
+      userPanCardNumber:
+        example: abgjhi6789
+        type: string
+      userPassword:
+        example: sample11110
+        minLength: 8
+        type: string
+      userPhoneNumber:
+        example: "7878543610"
+        type: string
+    required:
+    - userEmail
+    - userName
+    - userPanCardNumber
+    - userPassword
+    - userPhoneNumber
+    type: object
+  service.SignInRepository:
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a Stock Broker Application API
+  title: Stock Broker Application
+  version: "1.0"
+paths:
+  /signin:
+    post:
+      consumes:
+      - application/json
+      description: Performs validations on user sign-in credentials and verifies them.
+      parameters:
+      - description: User sign-in credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.SignInCredentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully signed in
+          schema:
+            type: string
+        "400":
+          description: Failed to sign in
+          schema:
+            type: string
+      summary: Perform sign-in validations
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Handles HTTP POST request to create new users
+      parameters:
+      - description: User information in JSON format
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User information inserted successfully
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new user
+swagger: "2.0"

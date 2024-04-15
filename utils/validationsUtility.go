@@ -8,20 +8,23 @@ import (
 )
 
 // SignUpValidations performs all the necessary validations for user signup.
+// @param user body models.UserInfo true "User information"
+// @return error
 func SignUpValidations(user *models.UserInfo) error {
 	validate := validator.New()
 
-	// Register custom validation functions if needed (already registered in ValidateCredentials)
-
 	// Perform validation
-	if err := validate.Struct(user); err != nil {
+	err := validate.Struct(user)
+	if err != nil {
 		return err // Validation error occurred
 	}
 
 	return nil // No validation error
 }
 
-// ValidateCredentials validates the provided SignInCredentials
+// ValidateCredentials validates the provided SignInCredentials.
+// @param creds body models.SignInCredentials true "User sign-in credentials"
+// @return error
 func ValidateCredentials(creds models.SignInCredentials) error {
 	validate := validator.New()
 
