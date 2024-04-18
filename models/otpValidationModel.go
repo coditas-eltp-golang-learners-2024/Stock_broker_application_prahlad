@@ -7,7 +7,7 @@ import (
 // ValidateOTPRequest represents the request body for validating OTP
 type ValidateOTPRequest struct {
 	Email string `json:"email" binding:"required"`
-	OTP   string `json:"otp" binding:"required"`
+	OTP   int    `json:"otp" binding:"required"`
 }
 
 // OTP represents the database entity for OTP values

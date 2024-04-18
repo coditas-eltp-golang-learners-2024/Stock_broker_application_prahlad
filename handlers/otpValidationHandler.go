@@ -36,9 +36,9 @@ func ValidateOTPHandler(otpService service.OTPValidationService, otpRepo repo.OT
 
 		// Respond with OTP validation results
 		if valid {
-			context.JSON(http.StatusOK, gin.H{"message": "OTP is valid"})
+			context.JSON(http.StatusOK, gin.H{"message": constants.ValidOTP})
 		} else {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": constants.ErrIvalidOTP})
+			context.JSON(http.StatusUnauthorized, gin.H{"message": constants.InvalidOTP})
 		}
 	}
 }
