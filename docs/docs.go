@@ -88,6 +88,33 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/validateOtp": {
+            "post": {
+                "description": "Validate OTP using the provided service and repository",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Validate OTP",
+                "parameters": [
+                    {
+                        "description": "OTP validation request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ValidateOTPRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -102,15 +129,20 @@ const docTemplate = `{
         "models.SignInCredentials": {
             "type": "object",
             "required": [
-                "userName",
-                "userPassword"
+                "email",
+                "name",
+                "password"
             ],
             "properties": {
-                "userName": {
+                "email": {
+                    "type": "string",
+                    "example": "testUser@gmail.com"
+                },
+                "name": {
                     "type": "string",
                     "example": "Username"
                 },
-                "userPassword": {
+                "password": {
                     "type": "string",
                     "minLength": 8,
                     "example": "userPassword"
@@ -128,33 +160,51 @@ const docTemplate = `{
         "models.UserInfo": {
             "type": "object",
             "required": [
-                "userEmail",
-                "userName",
-                "userPanCardNumber",
-                "userPassword",
-                "userPhoneNumber"
+                "email",
+                "name",
+                "pancardNumber",
+                "password",
+                "phoneNumber"
             ],
             "properties": {
-                "userEmail": {
+                "email": {
                     "type": "string",
                     "example": "testUser@gmail.com"
                 },
-                "userName": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string",
                     "example": "TestUser"
                 },
-                "userPanCardNumber": {
+                "pancardNumber": {
                     "type": "string",
                     "example": "abgjhi6789"
                 },
-                "userPassword": {
+                "password": {
                     "type": "string",
                     "minLength": 8,
                     "example": "sample11110"
                 },
-                "userPhoneNumber": {
+                "phoneNumber": {
                     "type": "string",
                     "example": "7878543610"
+                }
+            }
+        },
+        "models.ValidateOTPRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "otp"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "otp": {
+                    "type": "string"
                 }
             }
         },
@@ -167,7 +217,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "localhost:8081",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Stock Broker Application",

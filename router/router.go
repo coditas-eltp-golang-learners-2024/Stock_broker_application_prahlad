@@ -6,6 +6,7 @@ import (
 	"Stock_broker_application/src/app/authentication/handlers"
 	"Stock_broker_application/src/app/authentication/repo"
 	"Stock_broker_application/src/app/authentication/service"
+	"Stock_broker_application/src/app/authentication/utils/db"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -20,9 +21,13 @@ func SetUpRouter() *gin.Engine {
 
 	userRepository := repo.NewUserRepository()
 	userService := service.NewUserService(userRepository)
+	otpService := &service.DefaultOTPValidationService{}
+	otpRepo := &repo.DefaultOTPValidationRepo{DB: db.GormDb}
 
 	router.POST(constants.CreateUserRoute, handlers.PostUsersData(userService))
-	router.POST(constants.SignInRoute, handlers.SignInHandler(signInService))
+	router.POST(constants.SignInRoute, handlers.SignInHandler(signInService, otpService, otpRepo))
+
+	router.POST("/validateOTP", handlers.ValidateOTPHandler(otpService, otpRepo))
 
 	// Adding Swagger documentation route
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
