@@ -18,4 +18,6 @@ var (
 	ErrStartingServer        = errors.New("failed to start server")
 	ErrInVerification        = errors.New("invalid credentials, please try again")
 	ErrInBindingData         = errors.New("failed to bind data")
+	ErrInternalServer        = errors.New("internal server error")
+	ErrIvalidOTP             = errors.New("invalid OTP or OTP expired")
 )

@@ -2,6 +2,7 @@ package constants
 
 // User related routes
 const (
-	CreateUserRoute = "/signup"
-	SignInRoute     = "/signin"
+	CreateUserRoute  = "/signup"
+	SignInRoute      = "/signin"
+	ValidateOTPRoute = "/validateOTP"
 )

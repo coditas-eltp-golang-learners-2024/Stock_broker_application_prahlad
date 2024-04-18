@@ -15,15 +15,11 @@ type UserRepository interface {
 type userRepository struct{}
 
 // NewUserRepository creates a new instance of UserRepository.
-// @return *UserRepository
 func NewUserRepository() *userRepository {
 	return &userRepository{} // Return a pointer to a new instance of UserRepository
 }
 
 // CheckIfUserExistsByEmail checks if a user with the given email exists in the database.
-// @param email path string true "User email"
-// @return bool
-// @return error
 func (repoStruct *userRepository) CheckIfUserExistsByEmail(email string) (bool, error) {
 	var count int64
 	result := db.GormDb.Model(&models.UserInfo{}).Where("email = ?", email).Count(&count)
@@ -34,8 +30,6 @@ func (repoStruct *userRepository) CheckIfUserExistsByEmail(email string) (bool, 
 }
 
 // InsertUserInfo inserts user information into the database.
-// @param userInfo body models.UserInfo true "User information"
-// @return error
 func (repoStruct *userRepository) InsertUserInfo(userInfo *models.UserInfo) error {
 	result := db.GormDb.Create(userInfo)
 	if result.Error != nil {
@@ -48,9 +42,6 @@ func (repoStruct *userRepository) InsertUserInfo(userInfo *models.UserInfo) erro
 }
 
 // CheckUserExistenceByEmail checks if a user with the given email exists in the database.
-// @param email path string true "User email"
-// @return bool
-// @return error
 func CheckUserExistenceByEmail(email string) (bool, error) {
 	userRepository := NewUserRepository()
 	return userRepository.CheckIfUserExistsByEmail(email)

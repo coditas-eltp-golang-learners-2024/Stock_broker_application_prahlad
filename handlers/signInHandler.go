@@ -3,6 +3,7 @@ package handlers
 import (
 	"Stock_broker_application/src/app/authentication/constants"
 	"Stock_broker_application/src/app/authentication/models"
+	"Stock_broker_application/src/app/authentication/repo"
 	"Stock_broker_application/src/app/authentication/service"
 	"net/http"
 
@@ -18,7 +19,7 @@ import (
 // @Failure 400 {object} models.ErrorResponse "Invalid credentials or error message"
 // @Router /signin [post]
 
-func SignInHandler(signInService *service.SignInService) gin.HandlerFunc {
+func SignInHandler(signInService *service.SignInService, otpService service.OTPValidationService, otpRepo repo.OTPValidationRepo) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var userCredentials models.SignInCredentials
 
@@ -35,5 +36,19 @@ func SignInHandler(signInService *service.SignInService) gin.HandlerFunc {
 		}
 
 		context.JSON(http.StatusOK, models.SuccessResponse{Message: "Authentication successful"})
+
+		//Storing the genearted otp in database after successful SignIn
+		// Generate OTP using OTP service
+		otp, createdAt := otpService.GenerateOTP()
+		otpInstance := models.OTP{
+			Email: userCredentials.Email,
+		}
+
+		// Store the generated OTP in the database
+		if err := otpRepo.InsertOTP(otp, createdAt, otpInstance.Email); err != nil {
+			context.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Failed to store OTP, please try again"})
+			return
+		}
+
 	}
 }

@@ -6,7 +6,18 @@ import (
 	"Stock_broker_application/src/app/authentication/router"
 	"Stock_broker_application/src/app/authentication/utils/db"
 	"log"
+	"time"
 )
+
+var Loc *time.Location
+
+func init() {
+	var err error
+	Loc, err = time.LoadLocation("Asia/Kolkata")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 //@title Stock Broker Application
 //@version 1.0
@@ -30,12 +41,6 @@ func main() {
 		}
 	}()
 
-	// SetUpRouter sets up the Gin router with API endpoints and Swagger documentation.
-	// @title Stock Broker Application
-	// @version 1.0
-	// @description This is a Stock Broker Application API
-	// @host localhost:8080
-	// @BasePath /
 	// Setting up the router
 	r := router.SetUpRouter()
 

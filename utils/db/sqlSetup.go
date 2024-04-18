@@ -19,7 +19,7 @@ func CreateConnection() {
 	cfg := utils.LoadConfig("resources/application.yml")
 
 	// Construct the DSN (Data Source Name) for the database connection
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", // Add `?parseTime=true` for time parsing
 		cfg.Database.Username, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port, cfg.Database.Name)
 
 	// Open a new GORM connection to the database
