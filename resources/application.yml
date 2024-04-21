@@ -1,0 +1,11 @@
+database:
+  host: eltpdatabase.criiey6s64bu.eu-north-1.rds.amazonaws.com
+  port: 3306  
+  username: admin
+  password: admincoditas
+  name: eltp-database # Name of your database
+  
+
+
+
+#We create this yml file for devops team beacsue they understand yml file better.
